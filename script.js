@@ -53,173 +53,124 @@ function typeRole() {
 // Random Floating Animation for Icons with Profile Photo Repulsion
 function animateIcons() {
     const icons = document.querySelectorAll('.lang-icon');
-    const profileContainer = document.querySelector('.profile-container');
-    let isMouseOverProfile = false;
-    
-    // Track mouse position over profile
-    profileContainer.addEventListener('mouseenter', () => {
-        isMouseOverProfile = true;
+    const profilePhoto = document.querySelector('.profile-photo');
+
+    let mouseInside = false;
+
+    profilePhoto.addEventListener("mouseenter", (e) => {
+        mouseInside = true;
+        const ripple = document.createElement("span");
+        ripple.classList.add("ripple-wave");
+
+        // Pusat ripple = posisi foto
+        const bounds = profilePhoto.getBoundingClientRect();
+        ripple.style.left = bounds.left + bounds.width / 2 + "px";
+        ripple.style.top = bounds.top + bounds.height / 2 + "px";
+
+        // Size wave
+        ripple.style.width = "200px";
+        ripple.style.height = "200px";
+
+        document.body.appendChild(ripple);
+
+        setTimeout(() => ripple.remove(), 800);
     });
-    
-    profileContainer.addEventListener('mouseleave', () => {
-        isMouseOverProfile = false;
+
+    profilePhoto.addEventListener("mouseleave", () => {
+        mouseInside = false;
     });
-    
-    // Get profile center and radius
+
     function getProfileBounds() {
-        const rect = profileContainer.getBoundingClientRect();
+        const rect = profilePhoto.getBoundingClientRect();
         return {
             centerX: rect.left + rect.width / 2,
             centerY: rect.top + rect.height / 2,
-            radius: 180 // radius zona eksklusif (lebih besar dari foto)
+            radius: rect.width / 2 + 30
         };
     }
-    
-    // Check if position collides with profile
-    function isInProfileZone(x, y) {
-        const bounds = getProfileBounds();
-        const distance = Math.sqrt(
-            Math.pow(x - bounds.centerX, 2) + 
-            Math.pow(y - bounds.centerY, 2)
-        );
-        return distance < bounds.radius;
+
+    function insideNoGoZone(x, y) {
+        const b = getProfileBounds();
+        const dist = Math.sqrt((x - b.centerX) ** 2 + (y - b.centerY) ** 2);
+        return dist < b.radius;
     }
-    
-    // Get safe position away from profile
-    function getSafePosition(currentX, currentY) {
-        const bounds = getProfileBounds();
-        const containerRect = profileContainer.getBoundingClientRect();
-        
-        // Calculate repulsion vector
-        const dx = currentX - bounds.centerX;
-        const dy = currentY - bounds.centerY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < bounds.radius) {
-            // Push away from center
-            const pushDistance = bounds.radius + 50;
-            const angle = Math.atan2(dy, dx);
-            
-            const newX = bounds.centerX + Math.cos(angle) * pushDistance;
-            const newY = bounds.centerY + Math.sin(angle) * pushDistance;
-            
-            // Convert to percentage relative to container
-            const percentX = ((newX - containerRect.left) / containerRect.width) * 100;
-            const percentY = ((newY - containerRect.top) / containerRect.height) * 100;
-            
-            return {
-                top: Math.max(5, Math.min(95, percentY)),
-                left: Math.max(5, Math.min(95, percentX))
-            };
+
+    function getRepelledPosition(x, y) {
+        const b = getProfileBounds();
+        const dx = x - b.centerX;
+        const dy = y - b.centerY;
+        const angle = Math.atan2(dy, dx);
+
+        const extraPush = 90; 
+
+        return {
+            x: b.centerX + Math.cos(angle) * (b.radius + extraPush),
+            y: b.centerY + Math.sin(angle) * (b.radius + extraPush)
+        };
+    }
+
+    // --------------- NEW: REALTIME SHIELD ----------------
+    function realtimeShield() {
+        if (mouseInside) {
+            icons.forEach(icon => {
+                const rect = icon.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+
+                if (insideNoGoZone(x, y)) {
+                    const safe = getRepelledPosition(x, y);
+                    const container = icon.parentElement.getBoundingClientRect();
+
+                    // ----- Efek KEPENTAL + DAMAGE -----
+                    icon.classList.add("icon-damage");
+
+                    setTimeout(() => {
+                        icon.classList.remove("icon-damage");
+                    }, 200); // efek 0.2 detik
+
+                    icon.style.transition = "200ms linear";
+                    icon.style.top = ((safe.y - container.top) / container.height) * 100 + "%";
+                    icon.style.left = ((safe.x - container.left) / container.width) * 100 + "%";
+                }
+
+            });
         }
-        
-        return null;
+
+        requestAnimationFrame(realtimeShield);
     }
-    
+
+    realtimeShield(); // <-- Start the shield loop
+    // ------------------------------------------------------
+
     icons.forEach((icon, index) => {
-        // Set initial random position (avoiding profile)
-        let randomTop, randomLeft, attempts = 0;
-        do {
-            randomTop = Math.random() * 80 + 10;
-            randomLeft = Math.random() * 80 + 10;
-            attempts++;
-        } while (attempts < 10); // Try to find safe spot
-        
-        icon.style.top = randomTop + '%';
-        icon.style.left = randomLeft + '%';
-        
-        // Animate each icon continuously
-        function moveIcon() {
-            const currentTop = parseFloat(icon.style.top);
-            const currentLeft = parseFloat(icon.style.left);
-            
-            // Get current absolute position
-            const iconRect = icon.getBoundingClientRect();
-            const iconCenterX = iconRect.left + iconRect.width / 2;
-            const iconCenterY = iconRect.top + iconRect.height / 2;
-            
-            // Check if mouse is over profile and icon is in zone
-            if (isMouseOverProfile && isInProfileZone(iconCenterX, iconCenterY)) {
-                const safePos = getSafePosition(iconCenterX, iconCenterY);
-                if (safePos) {
-                    icon.style.top = safePos.top + '%';
-                    icon.style.left = safePos.left + '%';
-                    setTimeout(moveIcon, 100);
-                    return;
-                }
-            }
-            
-            // Find target position that doesn't collide with profile
-            let targetTop, targetLeft, validPosition = false;
-            let attempts = 0;
-            
+        function move() {
+            let targetTop, targetLeft, tries = 0;
+
             do {
-                targetTop = Math.random() * 70 + 15;
-                targetLeft = Math.random() * 70 + 15;
-                
-                const containerRect = profileContainer.getBoundingClientRect();
-                const testX = containerRect.left + (targetLeft / 100) * containerRect.width;
-                const testY = containerRect.top + (targetTop / 100) * containerRect.height;
-                
-                validPosition = !isMouseOverProfile || !isInProfileZone(testX, testY);
-                attempts++;
-            } while (!validPosition && attempts < 20);
-            
-            // Random duration between 3-6 seconds
-            const duration = (Math.random() * 3 + 3) * 1000;
-            
-            // Random rotation
-            const targetRotation = Math.random() * 20 - 10;
-            
-            const startTime = Date.now();
-            
-            function animate() {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                // Check collision during animation
-                const iconRect = icon.getBoundingClientRect();
-                const iconCenterX = iconRect.left + iconRect.width / 2;
-                const iconCenterY = iconRect.top + iconRect.height / 2;
-                
-                if (isMouseOverProfile && isInProfileZone(iconCenterX, iconCenterY)) {
-                    const safePos = getSafePosition(iconCenterX, iconCenterY);
-                    if (safePos) {
-                        icon.style.top = safePos.top + '%';
-                        icon.style.left = safePos.left + '%';
-                    }
-                    setTimeout(moveIcon, 100);
-                    return;
-                }
-                
-                // Easing function (ease-in-out)
-                const eased = progress < 0.5 
-                    ? 4 * progress * progress * progress 
-                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-                
-                // Calculate new position
-                const newTop = currentTop + (targetTop - currentTop) * eased;
-                const newLeft = currentLeft + (targetLeft - currentLeft) * eased;
-                const newRotation = targetRotation * eased;
-                
-                icon.style.top = newTop + '%';
-                icon.style.left = newLeft + '%';
-                icon.style.transform = `rotate(${newRotation}deg)`;
-                
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    setTimeout(moveIcon, Math.random() * 1000);
-                }
-            }
-            
-            animate();
+                targetTop = Math.random() * 80 + 10;
+                targetLeft = Math.random() * 80 + 10;
+
+                const container = icon.parentElement.getBoundingClientRect();
+                const absX = container.left + (targetLeft / 100) * container.width;
+                const absY = container.top + (targetTop / 100) * container.height;
+
+                if (!insideNoGoZone(absX, absY)) break;
+                tries++;
+
+            } while (tries < 20);
+
+            const duration = 3000 + Math.random() * 2500;
+            icon.style.transition = `${duration}ms ease-in-out`;
+            icon.style.top = targetTop + "%";
+            icon.style.left = targetLeft + "%";
+
+            setTimeout(move, duration);
         }
-        
-        // Start animation with random delay for each icon
-        setTimeout(moveIcon, index * 500);
+
+        setTimeout(move, index * 500);
     });
 }
+
 
 // Initialize animations on page load
 window.addEventListener('load', () => {
@@ -264,4 +215,58 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             });
         }
     });
+});
+
+
+// ==========================================================================================
+// About Me Section Animation on Scroll
+document.addEventListener('DOMContentLoaded', function() {
+    // Intersection Observer untuk detect ketika section masuk viewport
+    const observerOptions = {
+        threshold: 0.2, // Trigger ketika 20% section terlihat
+        rootMargin: '0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Animate semua elemen
+                animateAboutSection();
+                // Stop observing setelah animasi jalan (opsional)
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe about section
+    const aboutSection = document.querySelector('.about-section');
+    if (aboutSection) {
+        observer.observe(aboutSection);
+    }
+
+    function animateAboutSection() {
+        // Animate title
+        const title = document.querySelector('.section-title');
+        if (title) {
+            title.classList.add('animate');
+        }
+
+        // Animate photo
+        const photo = document.querySelector('.about-photo');
+        if (photo) {
+            photo.classList.add('animate');
+        }
+
+        // Animate info cards (Who Am I & My Approach)
+        const infoCards = document.querySelectorAll('.info-card');
+        infoCards.forEach(card => {
+            card.classList.add('animate');
+        });
+
+        // Animate personal info items
+        const infoItems = document.querySelectorAll('.info-item');
+        infoItems.forEach(item => {
+            item.classList.add('animate');
+        });
+    }
 });
