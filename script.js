@@ -50,6 +50,68 @@ function typeRole() {
     setTimeout(typeRole, typingSpeed);
 }
 
+// Random Floating Animation for Icons
+function animateIcons() {
+    const icons = document.querySelectorAll('.lang-icon');
+    
+    icons.forEach((icon, index) => {
+        // Set initial random position
+        const randomTop = Math.random() * 80 + 10; // 10% to 90%
+        const randomLeft = Math.random() * 80 + 10; // 10% to 90%
+        icon.style.top = randomTop + '%';
+        icon.style.left = randomLeft + '%';
+        
+        // Animate each icon continuously
+        function moveIcon() {
+            const currentTop = parseFloat(icon.style.top);
+            const currentLeft = parseFloat(icon.style.left);
+            
+            // Random target position (within bounds)
+            const targetTop = Math.random() * 70 + 15; // 15% to 85%
+            const targetLeft = Math.random() * 70 + 15; // 15% to 85%
+            
+            // Random duration between 3-6 seconds
+            const duration = (Math.random() * 3 + 3) * 1000;
+            
+            // Random rotation
+            const targetRotation = Math.random() * 20 - 10; // -10 to 10 degrees
+            
+            const startTime = Date.now();
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function (ease-in-out)
+                const eased = progress < 0.5 
+                    ? 4 * progress * progress * progress 
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+                
+                // Calculate new position
+                const newTop = currentTop + (targetTop - currentTop) * eased;
+                const newLeft = currentLeft + (targetLeft - currentLeft) * eased;
+                const newRotation = targetRotation * eased;
+                
+                icon.style.top = newTop + '%';
+                icon.style.left = newLeft + '%';
+                icon.style.transform = `rotate(${newRotation}deg)`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    // Start new random movement
+                    setTimeout(moveIcon, Math.random() * 1000); // 0-1 second pause
+                }
+            }
+            
+            animate();
+        }
+        
+        // Start animation with random delay for each icon
+        setTimeout(moveIcon, index * 500);
+    });
+}
+
 // Initialize animations on page load
 window.addEventListener('load', () => {
     // Show navbar with slide down animation
@@ -74,6 +136,11 @@ window.addEventListener('load', () => {
     setTimeout(() => {
         typeRole();
     }, 1000);
+    
+    // Start icon floating animation
+    setTimeout(() => {
+        animateIcons();
+    }, 1500);
 });
 
 // Smooth scroll for navigation links
