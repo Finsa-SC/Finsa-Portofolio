@@ -7,7 +7,7 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background-color: white;
-    color: black;
+    color: #1A1A1A;
     overflow-x: hidden;
 }
 
@@ -16,7 +16,7 @@ nav {
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: black;
+    background-color: #1A1A1A;
     color: white;
     z-index: 1000;
     transform: translateY(-100%);
@@ -125,7 +125,7 @@ nav.visible {
     display: inline-block;
     width: 2px;
     height: 2rem;
-    background-color: black;
+    background-color: #1A1A1A;
     margin-left: 4px;
     animation: blink 1s infinite;
     box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
@@ -174,7 +174,7 @@ nav.visible {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    background: #111;
+    background: #1A1A1A;
     padding: 0.5rem 0.8rem;
     border-radius: 50px;  /* smooth */
     height: 45px;
@@ -184,7 +184,7 @@ nav.visible {
 }
 
 .stat-card:hover {
-    background: #222;
+    background: #1A1A1A;
     transform: translateY(-2px);
 }
 
@@ -226,13 +226,13 @@ nav.visible {
 .photo-wrapper-fix {
     transform: translateY(-120px); /* geser naik */
 }
-
 .profile-container {
-    margin: 0;   /* hilangkan margin */
-    width: 400px;
-    height: 400px;
+    position: relative;   /* FIX utama */
+    width: 600px;
+    height: 600px;
+    margin: 0; /* atau auto kalau mau center */
+    transform: translateX(-70px);
 }
-
 
 .profile-photo-wrapper {
     position: absolute;
@@ -246,23 +246,44 @@ nav.visible {
     position: absolute;
     width: 300px;
     height: 300px;
-    background-color: black;
+    background-color: #1A1A1A;
     border-radius: 50%;
-    top: 49%;
+    top: 50%;            /* FIX: harus sama */
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
 .profile-photo {
     position: relative;
-    width: 280px;
-    height: 280px;
+    width: 290px;
+    height: 290px;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid white;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
+/* Ripple global */
+.ripple-wave {
+    position: fixed;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.15); /* ABU-ABU TRANSPARAN */
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+    animation: rippleAnimation 0.8s ease-out forwards;
+    z-index: 9999;
+}
+
+@keyframes rippleAnimation {
+    0% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(12); /* scale besar = seluruh layar */
+    }
+}
 
 /* Language Icons - Floating Animation */
 .lang-icon {
@@ -270,7 +291,7 @@ nav.visible {
     z-index: 20;
     width: 50px;
     height: 50px;
-    background-color: black;
+    background-color: #1A1A1A;
     padding: 10px;
     border-radius: 50%;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -376,6 +397,15 @@ nav.visible {
     }
 }
 
+/* Efek damage */
+.icon-damage {
+    background-color: #7e7e7e !important;
+    transform: scale(1.15) rotate(-12deg) !important; /* dari 0.8 → 1.15 */
+    box-shadow: 0 0 18px rgba(0,0,0,0.5) !important;
+    filter: brightness(0.7);
+    transition: 150ms ease;
+}
+
 .lang-icon:hover {
     transform: scale(1.2) !important;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
@@ -404,5 +434,356 @@ nav.visible {
     .profile-container {
         width: 300px;
         height: 300px;
+    }
+}
+
+
+/* ======================================================================================================================================= */
+/* About Me Section */
+/* Marquee Divider */
+.marquee-divider {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
+
+.marquee-track {
+    display: flex;
+    white-space: nowrap;
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    padding: 15px 0;
+    width: fit-content;
+}
+
+.marquee-top {
+    background-color: #000;
+    color: #fff;
+    animation: marqueeLeft 25s linear infinite;
+}
+
+.marquee-bottom {
+    background-color: #fff;
+    color: #000;
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+    animation: marqueeRight 25s linear infinite;
+}
+
+.marquee-track span {
+    display: inline-block;
+}
+
+@keyframes marqueeLeft {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes marqueeRight {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* About Me Section */
+.about-section {
+    padding: 60px 0;
+    background-color: #f8f9fa;
+}
+
+/* Animation Keyframes */
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #333;
+    font-weight: 700;
+    opacity: 0;
+    display: none;
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+/* Left Side - Photo */
+.about-photo {
+    position: relative;
+    opacity: 0;
+}
+
+.about-photo.animate {
+    animation: fadeInLeft 1s ease forwards 0.3s;
+}
+
+.about-photo img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Right Side - Info */
+.about-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.info-card {
+    background: transparent;
+    padding: 0;
+    opacity: 0;
+}
+
+.info-card.animate {
+    animation: fadeInRight 0.8s ease forwards;
+}
+
+.info-card:nth-child(1).animate {
+    animation-delay: 0.5s;
+}
+
+.info-card:nth-child(2).animate {
+    animation-delay: 0.7s;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.card-header h3 {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+    font-weight: 700;
+}
+
+.card-header .icon-box {
+    width: 35px;
+    height: 35px;
+    background-color: #000;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.card-header .icon-box svg {
+    width: 20px;
+    height: 20px;
+    stroke: white;
+}
+
+.info-card p {
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+/* Personal Info */
+.personal-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.info-item.animate {
+    animation: scaleIn 0.6s ease forwards;
+}
+
+.info-item:nth-child(1).animate { animation-delay: 0.9s; }
+.info-item:nth-child(2).animate { animation-delay: 1s; }
+.info-item:nth-child(3).animate { animation-delay: 1.1s; }
+.info-item:nth-child(4).animate { animation-delay: 1.2s; }
+.info-item:nth-child(5).animate { animation-delay: 1.3s; }
+.info-item:nth-child(6).animate { animation-delay: 1.4s; }
+.info-item:nth-child(7).animate { animation-delay: 1.5s; }
+
+.info-item:hover {
+    background: white;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+.info-item .icon-box {
+    width: 38px;
+    height: 38px;
+    background-color: #000;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.info-item .icon-box svg {
+    width: 20px;
+    height: 20px;
+    stroke: white;
+}
+
+.info-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.info-text .label {
+    font-size: 0.75rem;
+    color: #999;
+    font-weight: 600;
+}
+
+.info-text .value {
+    font-size: 0.85rem;
+    color: #333;
+    font-weight: 400;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .about-content {
+        grid-template-columns: 280px 1fr;
+        gap: 35px;
+    }
+    
+    .marquee-track {
+        font-size: 1.3rem;
+        padding: 12px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .about-photo {
+        max-width: 320px;
+        margin: 0 auto;
+    }
+    
+    .info-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .personal-info {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .marquee-track {
+        font-size: 1.1rem;
+        padding: 10px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-section {
+        padding: 50px 0;
+    }
+    
+    .card-header h3 {
+        font-size: 0.95rem;
+    }
+    
+    .info-card p {
+        font-size: 0.8rem;
+    }
+    
+    .marquee-track {
+        font-size: 0.9rem;
+        padding: 8px 0;
     }
 }
