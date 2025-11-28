@@ -13,7 +13,7 @@
         <div class="nav-container">
             <div class="logo">Portfolio</div>
             <div class="nav-links">
-                <a href="#home">Home</a>
+                <a href="#hero">Home</a>
                 <a href="#about">About</a>
                 <a href="#projects">Projects</a>
                 <a href="#contact">Contact</a>
@@ -22,7 +22,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section id="hero" class="hero">
         <div class="hero-container">
             <!-- Left Side - Text -->
             <div class="hero-left">
@@ -33,6 +33,7 @@
                         height="70px" 
                         style="vertical-align: middle;" />
                 </h1>
+
                 
                 <div class="role-container">
                     <span id="role-text"></span>
@@ -184,6 +185,163 @@
                 </div>
             </div>
 
+        </div>
+    </section>
+
+<!-- /* ======================================================================================================================================= */ -->
+    <!-- Divider Marquee -->
+    <div class="marquee-divider">
+        <div class="marquee-track marquee-top">
+            <span>ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • </span>
+            <span>ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • </span>
+        </div>
+        <div class="marquee-track marquee-bottom">
+            <span>ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • </span>
+            <span>ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • ABOUT ME • </span>
+        </div>
+    </div>
+
+
+    <!-- About Me Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            
+            <div class="about-content">
+                <!-- Left Side - Photo -->
+                <div class="about-photo">
+                    <img src="assets/eln2.jpg" alt="Profile Photo">
+                </div>
+                
+                <!-- Right Side - Content -->
+                <div class="about-info">
+                    <!-- Top Row: Who Am I & My Approach -->
+                    <div class="info-row">
+                        <!-- Who Am I -->
+                        <div class="info-card">
+                            <div class="card-header">
+                                <div class="icon-box">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <h3>Who Am I</h3>
+                            </div>
+                            <p>Saya adalah seorang web developer yang passionate dalam menciptakan website modern dan responsif. Dengan pengalaman di bidang front-end development, saya selalu berusaha memberikan solusi terbaik untuk setiap project.</p>
+                        </div>
+                        
+                        <!-- My Approach -->
+                        <div class="info-card">
+                            <div class="card-header">
+                                <div class="icon-box">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                    </svg>
+                                </div>
+                                <h3>My Approach</h3>
+                            </div>
+                            <p>Saya percaya bahwa detail adalah kunci kesuksesan. Setiap project saya kerjakan dengan pendekatan user-centric, memastikan pengalaman terbaik bagi pengguna sambil tetap menjaga kualitas kode yang clean dan maintainable.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom: Personal Info -->
+                    <div class="personal-info">
+                        <div class="info-item">
+                            <div class="icon-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <span class="label">Name</span>
+                                <span class="value">Your Name</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="icon-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <span class="label">Place of Birth</span>
+                                <span class="value">Surakarta</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="icon-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <span class="label">Phone</span>
+                                <span class="value">+62 812 3456 7890</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="icon-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <span class="label">Date of Birth</span>
+                                <span class="value">01 January 2000</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="icon-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <span class="label">Email</span>
+                                <span class="value">email@example.com</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="icon-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <span class="label">Education</span>
+                                <span class="value">Universitas Sebelas Maret</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="icon-box">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                                </svg>
+                            </div>
+                            <div class="info-text">
+                                <span class="label">GPA</span>
+                                <span class="value">3.85 / 4.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
