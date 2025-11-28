@@ -10,8 +10,7 @@ body {
     color: #1A1A1A;
     overflow-x: hidden;
 }
-
-/* Navbar */
+/* Navbar - kode asli kamu tetap ada */
 nav {
     position: fixed;
     top: 0;
@@ -36,24 +35,69 @@ nav.visible {
     align-items: center;
 }
 
+.nav-links a {
+    position: relative;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    overflow: hidden;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+/* SLIME kecil muncul dari bawah */
+.nav-links a::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: white;
+    border-radius: 0 0 12px 12px;
+    transition: height 0.35s ease;
+    z-index: -1;
+}
+
+/* HOVER → slime naik elegan */
+.nav-links a:hover::before {
+    height: 85%;
+}
+
+.nav-links a:hover {
+    color: #1a1a1a;
+}
+
+/* ====================== */
+/* ACTIVE → Tombol 3D halus */
+/* ====================== */
+
+.nav-links a.active {
+    color: #1a1a1a;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(255,255,255,0.2),
+                0 6px 16px rgba(0,0,0,0.35);
+    transform: translateY(-2px);
+}
+
+/* matikan slime saat active (biar bentuk rapi) */
+.nav-links a.active::before {
+    height: 0%;
+}
+
 .logo {
+    position: relative;
+    display: inline-block;
     font-size: 1.5rem;
     font-weight: bold;
 }
 
-.nav-links {
-    display: flex;
-    gap: 2rem;
-}
-
-.nav-links a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover {
-    color: #999;
+.o-bounce {
+    position: absolute;
+    top: 0;
+    display: inline-block;
+    will-change: transform;
+    pointer-events: none;
 }
 
 /* Hero Section */
@@ -231,7 +275,7 @@ nav.visible {
     width: 600px;
     height: 600px;
     margin: 0; /* atau auto kalau mau center */
-    transform: translateX(-70px);
+    transform: translateX(20px);
 }
 
 .profile-photo-wrapper {
@@ -446,7 +490,7 @@ nav.visible {
     overflow: hidden;
     position: relative;
     padding: 0;
-    margin: 0;
+    margin-top: 70px;
 }
 
 .marquee-track {
