@@ -50,14 +50,81 @@ function typeRole() {
     setTimeout(typeRole, typingSpeed);
 }
 
-// Random Floating Animation for Icons
+// Random Floating Animation for Icons with Profile Photo Repulsion
 function animateIcons() {
     const icons = document.querySelectorAll('.lang-icon');
+    const profileContainer = document.querySelector('.profile-container');
+    let isMouseOverProfile = false;
+    
+    // Track mouse position over profile
+    profileContainer.addEventListener('mouseenter', () => {
+        isMouseOverProfile = true;
+    });
+    
+    profileContainer.addEventListener('mouseleave', () => {
+        isMouseOverProfile = false;
+    });
+    
+    // Get profile center and radius
+    function getProfileBounds() {
+        const rect = profileContainer.getBoundingClientRect();
+        return {
+            centerX: rect.left + rect.width / 2,
+            centerY: rect.top + rect.height / 2,
+            radius: 180 // radius zona eksklusif (lebih besar dari foto)
+        };
+    }
+    
+    // Check if position collides with profile
+    function isInProfileZone(x, y) {
+        const bounds = getProfileBounds();
+        const distance = Math.sqrt(
+            Math.pow(x - bounds.centerX, 2) + 
+            Math.pow(y - bounds.centerY, 2)
+        );
+        return distance < bounds.radius;
+    }
+    
+    // Get safe position away from profile
+    function getSafePosition(currentX, currentY) {
+        const bounds = getProfileBounds();
+        const containerRect = profileContainer.getBoundingClientRect();
+        
+        // Calculate repulsion vector
+        const dx = currentX - bounds.centerX;
+        const dy = currentY - bounds.centerY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < bounds.radius) {
+            // Push away from center
+            const pushDistance = bounds.radius + 50;
+            const angle = Math.atan2(dy, dx);
+            
+            const newX = bounds.centerX + Math.cos(angle) * pushDistance;
+            const newY = bounds.centerY + Math.sin(angle) * pushDistance;
+            
+            // Convert to percentage relative to container
+            const percentX = ((newX - containerRect.left) / containerRect.width) * 100;
+            const percentY = ((newY - containerRect.top) / containerRect.height) * 100;
+            
+            return {
+                top: Math.max(5, Math.min(95, percentY)),
+                left: Math.max(5, Math.min(95, percentX))
+            };
+        }
+        
+        return null;
+    }
     
     icons.forEach((icon, index) => {
-        // Set initial random position
-        const randomTop = Math.random() * 80 + 10; // 10% to 90%
-        const randomLeft = Math.random() * 80 + 10; // 10% to 90%
+        // Set initial random position (avoiding profile)
+        let randomTop, randomLeft, attempts = 0;
+        do {
+            randomTop = Math.random() * 80 + 10;
+            randomLeft = Math.random() * 80 + 10;
+            attempts++;
+        } while (attempts < 10); // Try to find safe spot
+        
         icon.style.top = randomTop + '%';
         icon.style.left = randomLeft + '%';
         
@@ -66,21 +133,64 @@ function animateIcons() {
             const currentTop = parseFloat(icon.style.top);
             const currentLeft = parseFloat(icon.style.left);
             
-            // Random target position (within bounds)
-            const targetTop = Math.random() * 70 + 15; // 15% to 85%
-            const targetLeft = Math.random() * 70 + 15; // 15% to 85%
+            // Get current absolute position
+            const iconRect = icon.getBoundingClientRect();
+            const iconCenterX = iconRect.left + iconRect.width / 2;
+            const iconCenterY = iconRect.top + iconRect.height / 2;
+            
+            // Check if mouse is over profile and icon is in zone
+            if (isMouseOverProfile && isInProfileZone(iconCenterX, iconCenterY)) {
+                const safePos = getSafePosition(iconCenterX, iconCenterY);
+                if (safePos) {
+                    icon.style.top = safePos.top + '%';
+                    icon.style.left = safePos.left + '%';
+                    setTimeout(moveIcon, 100);
+                    return;
+                }
+            }
+            
+            // Find target position that doesn't collide with profile
+            let targetTop, targetLeft, validPosition = false;
+            let attempts = 0;
+            
+            do {
+                targetTop = Math.random() * 70 + 15;
+                targetLeft = Math.random() * 70 + 15;
+                
+                const containerRect = profileContainer.getBoundingClientRect();
+                const testX = containerRect.left + (targetLeft / 100) * containerRect.width;
+                const testY = containerRect.top + (targetTop / 100) * containerRect.height;
+                
+                validPosition = !isMouseOverProfile || !isInProfileZone(testX, testY);
+                attempts++;
+            } while (!validPosition && attempts < 20);
             
             // Random duration between 3-6 seconds
             const duration = (Math.random() * 3 + 3) * 1000;
             
             // Random rotation
-            const targetRotation = Math.random() * 20 - 10; // -10 to 10 degrees
+            const targetRotation = Math.random() * 20 - 10;
             
             const startTime = Date.now();
             
             function animate() {
                 const elapsed = Date.now() - startTime;
                 const progress = Math.min(elapsed / duration, 1);
+                
+                // Check collision during animation
+                const iconRect = icon.getBoundingClientRect();
+                const iconCenterX = iconRect.left + iconRect.width / 2;
+                const iconCenterY = iconRect.top + iconRect.height / 2;
+                
+                if (isMouseOverProfile && isInProfileZone(iconCenterX, iconCenterY)) {
+                    const safePos = getSafePosition(iconCenterX, iconCenterY);
+                    if (safePos) {
+                        icon.style.top = safePos.top + '%';
+                        icon.style.left = safePos.left + '%';
+                    }
+                    setTimeout(moveIcon, 100);
+                    return;
+                }
                 
                 // Easing function (ease-in-out)
                 const eased = progress < 0.5 
@@ -99,8 +209,7 @@ function animateIcons() {
                 if (progress < 1) {
                     requestAnimationFrame(animate);
                 } else {
-                    // Start new random movement
-                    setTimeout(moveIcon, Math.random() * 1000); // 0-1 second pause
+                    setTimeout(moveIcon, Math.random() * 1000);
                 }
             }
             
