@@ -16,7 +16,7 @@
                 <a href="#hero">Home</a>
                 <a href="#about">About</a>
                 <a href="#skills">Skills</a>
-                <a href="#projects">Projects</a>
+                <a href="#portofolio">Portofolio</a>
                 <a href="#contact">Contact</a>
             </div>
         </div>
@@ -595,6 +595,249 @@
             </div>
         </div>
     </section>
+
+    <!-- Portfolio Showcase Section -->
+    <section id="portfolio" class="portfolio-section">
+        <div class="container">
+            <h2 class="section-title">Portfolio Showcase</h2>
+            
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-btn active" data-tab="projects">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m14.5 4-5 16"/>
+                        <path d="m18 8 4 4-4 4"/>
+                        <path d="m6 8-4 4 4 4"/>
+                    </svg>
+                    Projects
+                </button>
+                <button class="tab-btn" data-tab="certificates">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 7h16"/>
+                        <path d="M5 11h14"/>
+                        <path d="M6 15h12"/>
+                        <path d="M20 3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/>
+                    </svg>
+                    Certificates
+                </button>
+                <button class="tab-btn" data-tab="experience">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    </svg>
+                    Experience
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Projects Tab -->
+                <div class="tab-pane active" id="projects">
+                    <div class="projects-grid">
+                        <!-- Project Card 1 -->
+                        <a href="https://github.com/Finsa-SC/AutoGitHub-Uploader-with-ollama" target="_blank" class="project-card">
+                            <div class="project-image">
+                                <img src="https://logos-world.net/wp-content/uploads/2020/11/GitHub-Logo.png" alt="Hand-detector" onerror="this.src='assets/fairy_icon.png'">
+                                <div class="project-overlay">
+                                    <span class="view-project">View Project →</span>
+                                </div>
+                            </div>
+                            <div class="project-info">
+                                <h3 class="project-title">GitHub Uploader with Ollama</h3>
+                                <p class="project-desc">This automation tool simplifies the process of creating GitHub repositories and pushing your local projects to GitHub. It leverages local LLM capabilities through Ollama to generate intelligent project names and descriptions, saving you time and effort</p>
+                                <div class="project-tags">
+                                    <span class="tag">Python</span>
+                                    <span class="tag">Ollama</span>
+                                    <span class="tag">Github Api</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!-- card Block Chain -->
+                        <a href="https://github.com/Finsa-SC/BlockChain" target="_blank" class="project-card">
+                            <div class="project-image">
+                                <img src="assets/eln.jpeg" alt="Hand-detector" onerror="this.src='assets/fairy_icon.png'">
+                                <div class="project-overlay">
+                                    <span class="view-project">View Project →</span>
+                                </div>
+                            </div>
+                            <div class="project-info">
+                                <h3 class="project-title">BlockChain Simulation</h3>
+                                <p class="project-desc">A simple blockchain simulation project that demonstrates the basic concepts of blockchain technology including blocks, mining, transactions, and peer-to-peer networking.</p>
+                                <div class="project-tags">
+                                    <span class="tag">Python</span>
+                                    <span class="tag">Uvicorn</span>
+                                    <span class="tag">LevelDB</span>
+                                </div>
+                            </div>
+                        </a>
+                        <!-- Hand Detector -->
+                        <a href="https://github.com/Finsa-SC/Hand-detector" target="_blank" class="project-card">
+                            <div class="project-image">
+                                <img src="assets/eln.jpeg" alt="Hand-detector" onerror="this.src='assets/fairy_icon.png'">
+                                <div class="project-overlay">
+                                    <span class="view-project">View Project →</span>
+                                </div>
+                            </div>
+                            <div class="project-info">
+                                <h3 class="project-title">Hand Detector</h3>
+                                <p class="project-desc">This is a simple Python project that uses your webcam to detect hand gestures in real-time using the cvzone library.</p>
+                                <div class="project-tags">
+                                    <span class="tag">Python</span>
+                                    <span class="tag">OpenCV</span>
+                                    <span class="tag">CVZone</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://github.com/Finsa-SC/FrozenLake" target="_blank" class="project-card">
+                            <div class="project-image">
+                                <img src="assets/frozen_lake.gif" alt="Frozen Lake" onerror="this.src='assets/fairy_icon.png'">
+                                <div class="project-overlay">
+                                    <span class="view-project">View Project →</span>
+                                </div>
+                            </div>
+                            <div class="project-info">
+                                <h3 class="project-title">Frozen Lake</h3>
+                                <p class="project-desc">This project implements a Q-Learning algorithm to solve the FrozenLake environment from Gymnasium (formerly OpenAI Gym). FrozenLake is a 4x4 and 8x8 grid environment where an agent must navigate from the starting position to the goal while avoiding holes.</p>
+                                <div class="project-tags">
+                                    <span class="tag">Python</span>
+                                    <span class="tag">Q-Learning</span>
+                                    <span class="tag">Numpy</span>
+                                </div>
+                            </div>
+                        </a>
+                        
+
+                        <!-- Project Card 2 - Placeholder -->
+                        <div class="project-card placeholder">
+                            <div class="project-image">
+                                <div class="coming-soon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <polyline points="12 6 12 12 16 14"/>
+                                    </svg>
+                                    <span>Coming Soon</span>
+                                </div>
+                            </div>
+                            <div class="project-info">
+                                <h3 class="project-title">Next Project</h3>
+                                <p class="project-desc">Working on something amazing. Stay tuned for updates!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certificates Tab -->
+                <div class="tab-pane" id="certificates">
+                    <div class="certificates-grid">
+                        <!-- Certificate Card 1 -->
+                        <div class="certificate-card">
+                            <div class="certificate-image">
+                                <img src="assets/CRF1.jpg" alt="Certificate 1">
+                            </div>
+                            <div class="certificate-name">
+                                <span>LKS IT Software Solutions (District Level)</span>
+                            </div>
+                        </div>
+
+                        <!-- Certificate Card 2 -->
+                        <div class="certificate-card">
+                            <div class="certificate-image">
+                                <img src="https://via.placeholder.com/600x400/1a1a1a/ffffff?text=Certificate+2" alt="Certificate 2">
+                            </div>
+                            <div class="certificate-name">
+                                <span>Test 1</span>
+                            </div>
+                        </div>
+
+                        <!-- Certificate Card 3 (Hidden initially) -->
+                        <div class="certificate-card hidden-cert">
+                            <div class="certificate-image">
+                                <img src="https://via.placeholder.com/600x400/1a1a1a/ffffff?text=Certificate+3" alt="Certificate 3">
+                            </div>
+                            <div class="certificate-name">
+                                <span>Test 2</span>
+                            </div>
+                        </div>
+
+                        <!-- Certificate Card 4 (Hidden initially) -->
+                        <div class="certificate-card hidden-cert">
+                            <div class="certificate-image">
+                                <img src="https://via.placeholder.com/600x400/1a1a1a/ffffff?text=Certificate+4" alt="Certificate 4">
+                            </div>
+                            <div class="certificate-name">
+                                <span>Test 3</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="show-more-btn">
+                        <span>Show More</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Experience Tab -->
+                <div class="tab-pane" id="experience">
+                    <div class="timeline">
+                        <!-- Education Item -->
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <span class="timeline-year">2025</span>
+                                <h3 class="timeline-title"></h3>
+                                <p class="timeline-subtitle">Achived Victory of LKS IT Software Solutions (District Level)</p>
+                                <p class="timeline-desc">Achived 1 st place in Lomba Kpmpetensi Siswa (LKS) for the category IT Sofware Solutions for Business at the district level, demonstraining strong analytical thinking, clean code structure, and practical problem solving</p>
+                            </div>
+                        </div>
+
+                        <!-- Experience Item 1 -->
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <span class="timeline-year">2024 - Present</span>
+                                <h3 class="timeline-title">SMK Bhina Karya Karanganyar</h3>
+                                <p class="timeline-subtitle">Self-Employed</p>
+                                <p class="timeline-desc">Expanded technical expertise with with structured learning in programming, backend development, and software engineering principles</p>
+                            </div>
+                        </div>
+
+                        <!-- Experience Item 2 -->
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <span class="timeline-year">2023</span>
+                                <h3 class="timeline-title">Self-Taught Web Development</h3>
+                                <p class="timeline-subtitle">School Project</p>
+                                <p class="timeline-desc">Started learning web development independently, focusing on HTML, CSS, and basic Java Script to build foundational technical skills</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certificate Modal -->
+    <div class="certificate-modal" id="certificateModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            <div class="modal-info">
+                <h3 id="modalCertName">Certificate Name</h3>
+                <p id="modalCertIssuer">Issued by: Organization</p>
+                <p id="modalCertDate">Date: January 2024</p>
+            </div>
+            <div class="modal-image">
+                <img id="modalCertImage" src="" alt="Certificate">
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
