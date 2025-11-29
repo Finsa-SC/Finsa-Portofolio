@@ -11,16 +11,122 @@ let charIndex = 0;
 let isDeleting = false;
 let typingSpeed = 100;
 
-// hover
+// Enhanced Navbar with Scroll Tracking and Smooth Highlight
 document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('.nav-links a');
+    const sections = document.querySelectorAll('section[id]');
+    const navLinksContainer = document.querySelector('.nav-links');
     
+    // Create highlight indicator
+    const highlight = document.createElement('div');
+    highlight.className = 'nav-highlight';
+    navLinksContainer.appendChild(highlight);
+    
+    // Handle click navigation
     navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            navLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+            
+            if (targetSection) {
+                targetSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         });
     });
+    
+    // Update highlight position
+    function updateHighlight(activeLink, progress = 1) {
+        if (!activeLink) return;
+        
+        const linkRect = activeLink.getBoundingClientRect();
+        const containerRect = navLinksContainer.getBoundingClientRect();
+        
+        const left = linkRect.left - containerRect.left;
+        const width = linkRect.width;
+        
+        highlight.style.left = `${left}px`;
+        highlight.style.width = `${width}px`;
+        highlight.style.opacity = progress;
+    }
+    
+    // Handle scroll to update active nav
+    function onScroll() {
+        const scrollPos = window.scrollY + 100; // offset for navbar height
+        
+        let currentSection = null;
+        let nextSection = null;
+        let progress = 1;
+        
+        // Find current and next section
+        sections.forEach((section, index) => {
+            const sectionTop = section.offsetTop;
+            const sectionBottom = sectionTop + section.offsetHeight;
+            
+            if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                currentSection = section;
+                if (index < sections.length - 1) {
+                    nextSection = sections[index + 1];
+                }
+            }
+        });
+        
+        if (currentSection) {
+            const sectionTop = currentSection.offsetTop;
+            const sectionHeight = currentSection.offsetHeight;
+            const sectionBottom = sectionTop + sectionHeight;
+            
+            // Calculate progress between sections
+            const sectionProgress = (scrollPos - sectionTop) / sectionHeight;
+            
+            // Find corresponding nav links
+            const currentLink = document.querySelector(`.nav-links a[href="#${currentSection.id}"]`);
+            const nextLink = nextSection ? document.querySelector(`.nav-links a[href="#${nextSection.id}"]`) : null;
+            
+            // Remove active class from all
+            navLinks.forEach(l => {
+                l.classList.remove('active');
+                l.classList.remove('active-partial');
+            });
+            
+            // Transition zone (last 30% of current section)
+            if (nextLink && sectionProgress > 0.7) {
+                const transitionProgress = (sectionProgress - 0.7) / 0.3; // 0 to 1
+                
+                // Calculate interpolated position
+                const currentRect = currentLink.getBoundingClientRect();
+                const nextRect = nextLink.getBoundingClientRect();
+                const containerRect = navLinksContainer.getBoundingClientRect();
+                
+                const currentLeft = currentRect.left - containerRect.left;
+                const currentWidth = currentRect.width;
+                const nextLeft = nextRect.left - containerRect.left;
+                const nextWidth = nextRect.width;
+                
+                const interpolatedLeft = currentLeft + (nextLeft - currentLeft) * transitionProgress;
+                const interpolatedWidth = currentWidth + (nextWidth - currentWidth) * transitionProgress;
+                
+                highlight.style.left = `${interpolatedLeft}px`;
+                highlight.style.width = `${interpolatedWidth}px`;
+                highlight.style.opacity = '1';
+                
+                // Add partial active state
+                currentLink.classList.add('active-partial');
+                nextLink.classList.add('active-partial');
+            } else {
+                // Normal state - fully on one section
+                currentLink.classList.add('active');
+                updateHighlight(currentLink, 1);
+            }
+        }
+    }
+    
+    // Initialize
+    window.addEventListener('scroll', onScroll);
+    onScroll(); // Initial call
 });
 
 // o bouncing
@@ -392,9 +498,10 @@ document.addEventListener('DOMContentLoaded', function() {
             .forEach(i => i.classList.remove('animate'));
     }
 });
+
 document.addEventListener("DOMContentLoaded", () => {
-    const marqueeTop = document.querySelector(".marquee-top .marquee-track");
-    const marqueeBottom = document.querySelector(".marquee-bottom .marquee-track");
+    const marqueeTop = document.querySelector(".marquee-top");
+    const marqueeBottom = document.querySelector(".marquee-bottom");
 
     let lastScroll = window.scrollY;
 
@@ -403,8 +510,92 @@ document.addEventListener("DOMContentLoaded", () => {
         const direction = currentScroll > lastScroll ? 1 : -1; 
         lastScroll = currentScroll;
 
-        // Semakin cepat scroll, semakin jauh mereka bergerak
-        marqueeTop.style.transform = `translateX(${currentScroll * -0.25}px)`;
-        marqueeBottom.style.transform = `translateX(${currentScroll * 0.25}px)`;
+        if (marqueeTop) marqueeTop.style.transform = `translateX(${currentScroll * -0.25}px)`;
+        if (marqueeBottom) marqueeBottom.style.transform = `translateX(${currentScroll * 0.25}px)`;
     });
 });
+
+
+
+// =====================================================================================================================================================================================================
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+const animateSkills = () => {
+    const skillsSection = document.querySelector('#skills');
+    const title = document.querySelector('.skills-title');
+    const skillCards = document.querySelectorAll('.skill-card');
+
+    if (!skillsSection) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+
+                // Title tanpa animasi
+                title.classList.add('animate');
+                title.style.opacity = '1';
+
+                skillCards.forEach((card, i) => {
+                    card.classList.remove('animate');
+                    card.style.opacity = '0';
+
+                    setTimeout(() => {
+                        card.classList.add('animate');
+                    }, 150 + (i * 100));
+                });
+
+            } else {
+                title.classList.remove('animate');
+                skillCards.forEach(card => card.classList.remove('animate'));
+            }
+        });
+    }, {
+        threshold: 0.25,
+        rootMargin: "-60px"
+    });
+
+    observer.observe(skillsSection);
+};
+
+
+// Active state untuk navigation
+const updateActiveNav = () => {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (window.pageYOffset >= sectionTop - 150) {
+            current = section.getAttribute('id');
+        }
+    });
+    
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').slice(1) === current) {
+            link.classList.add('active');
+        }
+    });
+};
+
+// Init saat halaman load
+document.addEventListener('DOMContentLoaded', () => {
+    animateSkills();
+    updateActiveNav();
+});
+
+// Update saat scroll
+window.addEventListener('scroll', updateActiveNav);
