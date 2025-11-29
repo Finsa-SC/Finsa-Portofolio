@@ -599,3 +599,269 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Update saat scroll
 window.addEventListener('scroll', updateActiveNav);
+
+// Portfolio Showcase Script
+// Portfolio Showcase Script
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab Switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetTab = btn.getAttribute('data-tab');
+            
+            // Remove active class from all
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabPanes.forEach(p => p.classList.remove('active'));
+            
+            // Add active class to clicked
+            btn.classList.add('active');
+            document.getElementById(targetTab).classList.add('active');
+            
+            // Re-trigger animations for the active tab
+            animateTabContent(targetTab);
+        });
+    });
+    
+    // Intersection Observer for section animation
+    const portfolioSection = document.querySelector('.portfolio-section');
+    
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px'
+    };
+    
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateSection();
+            }
+        });
+    }, observerOptions);
+    
+    if (portfolioSection) {
+        sectionObserver.observe(portfolioSection);
+    }
+    
+    function animateSection() {
+        // Animate title
+        const title = document.querySelector('.section-title');
+        if (title) {
+            title.classList.add('animate');
+        }
+        
+        // Animate tab navigation
+        const tabNav = document.querySelector('.tab-navigation');
+        if (tabNav) {
+            tabNav.classList.add('animate');
+        }
+        
+        // Animate initial tab content (projects)
+        setTimeout(() => {
+            animateTabContent('projects');
+        }, 300);
+    }
+    
+    function animateTabContent(tabName) {
+        const activePane = document.getElementById(tabName);
+        if (!activePane) return;
+        
+        // Reset all animations first
+        const allCards = activePane.querySelectorAll('.project-card, .certificate-card, .timeline-item');
+        allCards.forEach(card => {
+            card.classList.remove('animate');
+        });
+        
+        // Trigger reflow
+        void activePane.offsetWidth;
+        
+        // Re-add animations
+        setTimeout(() => {
+            allCards.forEach(card => {
+                card.classList.add('animate');
+            });
+        }, 50);
+    }
+    
+    // Certificate Modal
+    const certificateCards = document.querySelectorAll('.certificate-card');
+    const modal = document.getElementById('certificateModal');
+    const modalClose = document.querySelector('.modal-close');
+    const modalOverlay = document.querySelector('.modal-overlay');
+    
+    // Certificate data
+    const certificatesData = [
+        {
+            name: 'LKS IT Software Solutions (District Level)',
+            issuer: 'Department of Education of Karanganyar',
+            date: 'February 2025',
+            image: 'assets/CRF1.jpg'
+        },
+        {
+            name: 'test',
+            issuer: 'test',
+            date: 'test',
+            image: 'assets/cert2.jpg'
+        },
+        {
+            name: 'test',
+            issuer: 'test',
+            date: 'test',
+            image: 'assets/cert3.jpg'
+        },
+        {
+            name: 'test',
+            issuer: 'test',
+            date: 'test',
+            image: 'assets/cert4.jpg'
+        }
+    ];
+    
+    certificateCards.forEach((card, index) => {
+        card.addEventListener('click', () => {
+            const certData = certificatesData[index];
+            if (certData) {
+                showCertificateModal(certData);
+            }
+        });
+    });
+    
+    function showCertificateModal(data) {
+        document.getElementById('modalCertName').textContent = data.name;
+        document.getElementById('modalCertIssuer').textContent = `Issued by: ${data.issuer}`;
+        document.getElementById('modalCertDate').textContent = `Date: ${data.date}`;
+        document.getElementById('modalCertImage').src = data.image;
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeCertificateModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    if (modalClose) {
+        modalClose.addEventListener('click', closeCertificateModal);
+    }
+    
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', closeCertificateModal);
+    }
+    
+    // Close modal with ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeCertificateModal();
+        }
+    });
+    
+    // Show More Certificates
+    const showMoreBtn = document.querySelector('.show-more-btn');
+    const hiddenCerts = document.querySelectorAll('.hidden-cert');
+    let isExpanded = false;
+    
+    if (showMoreBtn) {
+        showMoreBtn.addEventListener('click', () => {
+            if (!isExpanded) {
+                // Show hidden certificates
+                hiddenCerts.forEach((cert, index) => {
+                    setTimeout(() => {
+                        cert.classList.add('show');
+                        cert.classList.add('animate');
+                    }, index * 100);
+                });
+                
+                showMoreBtn.querySelector('span').textContent = 'Show Less';
+                showMoreBtn.querySelector('svg').style.transform = 'rotate(180deg)';
+                isExpanded = true;
+            } else {
+                // Hide certificates
+                hiddenCerts.forEach(cert => {
+                    cert.classList.remove('show');
+                    cert.classList.remove('animate');
+                });
+                
+                showMoreBtn.querySelector('span').textContent = 'Show More';
+                showMoreBtn.querySelector('svg').style.transform = 'rotate(0deg)';
+                isExpanded = false;
+                
+                // Scroll back to certificates grid
+                document.querySelector('.certificates-grid').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }
+        });
+    }
+    
+    // Parallax effect for project images
+    const projectCards = document.querySelectorAll('.project-card');
+    
+    projectCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 20;
+            const rotateY = (centerX - x) / 20;
+            
+            const img = card.querySelector('.project-image img');
+            if (img) {
+                img.style.transform = `scale(1.05) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            }
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            const img = card.querySelector('.project-image img');
+            if (img) {
+                img.style.transform = 'scale(1) rotateX(0) rotateY(0)';
+            }
+        });
+    });
+    
+    // Timeline animation on scroll
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    
+    const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, {
+        threshold: 0.3
+    });
+    
+    timelineItems.forEach(item => {
+        timelineObserver.observe(item);
+    });
+    
+    // Add hover effect sound (optional - commented out)
+    // const hoverSound = new Audio('path/to/hover-sound.mp3');
+    // document.querySelectorAll('.tab-btn, .project-card, .certificate-card').forEach(el => {
+    //     el.addEventListener('mouseenter', () => {
+    //         hoverSound.currentTime = 0;
+    //         hoverSound.play();
+    //     });
+    // });
+    
+    // Smooth scroll for navigation
+    document.querySelectorAll('a[href^="#portfolio"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
