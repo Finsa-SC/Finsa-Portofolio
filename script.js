@@ -1,9 +1,9 @@
 // Roles for typing animation
 const roles = [
-    'Junior Software Developer',
-    'Beginner Android Developer',
-    'Software Engineer',
-    'Problem Solver'
+    'Cybersecurity Enthusiast',
+    'Network Security Learner',
+    'DevSecOps Learner',
+    'Backend & Security Developer'
 ];
 
 let roleIndex = 0;
@@ -17,145 +17,95 @@ document.addEventListener('DOMContentLoaded', function() {
     const sections = document.querySelectorAll('section[id]');
     const navLinksContainer = document.querySelector('.nav-links');
     
-    // Create highlight indicator
     const highlight = document.createElement('div');
     highlight.className = 'nav-highlight';
     navLinksContainer.appendChild(highlight);
     
-    // Handle click navigation
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             const targetSection = document.querySelector(targetId);
-            
             if (targetSection) {
-                targetSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
     });
     
-    // Update highlight position
-    function updateHighlight(activeLink, progress = 1) {
+    function updateHighlight(activeLink) {
         if (!activeLink) return;
-        
         const linkRect = activeLink.getBoundingClientRect();
         const containerRect = navLinksContainer.getBoundingClientRect();
-        
-        const left = linkRect.left - containerRect.left;
-        const width = linkRect.width;
-        
-        highlight.style.left = `${left}px`;
-        highlight.style.width = `${width}px`;
-        highlight.style.opacity = progress;
+        highlight.style.left = `${linkRect.left - containerRect.left}px`;
+        highlight.style.width = `${linkRect.width}px`;
+        highlight.style.opacity = 1;
     }
     
-    // Handle scroll to update active nav
     function onScroll() {
-        const scrollPos = window.scrollY + 100; // offset for navbar height
-        
+        const scrollPos = window.scrollY + 100;
         let currentSection = null;
         let nextSection = null;
-        let progress = 1;
-        
-        // Find current and next section
+
         sections.forEach((section, index) => {
             const sectionTop = section.offsetTop;
             const sectionBottom = sectionTop + section.offsetHeight;
-            
             if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
                 currentSection = section;
-                if (index < sections.length - 1) {
-                    nextSection = sections[index + 1];
-                }
+                if (index < sections.length - 1) nextSection = sections[index + 1];
             }
         });
-        
+
         if (currentSection) {
             const sectionTop = currentSection.offsetTop;
             const sectionHeight = currentSection.offsetHeight;
-            const sectionBottom = sectionTop + sectionHeight;
-            
-            // Calculate progress between sections
             const sectionProgress = (scrollPos - sectionTop) / sectionHeight;
-            
-            // Find corresponding nav links
             const currentLink = document.querySelector(`.nav-links a[href="#${currentSection.id}"]`);
             const nextLink = nextSection ? document.querySelector(`.nav-links a[href="#${nextSection.id}"]`) : null;
-            
-            // Remove active class from all
-            navLinks.forEach(l => {
-                l.classList.remove('active');
-                l.classList.remove('active-partial');
-            });
-            
-            // Transition zone (last 30% of current section)
+
+            navLinks.forEach(l => { l.classList.remove('active'); l.classList.remove('active-partial'); });
+
             if (nextLink && sectionProgress > 0.7) {
-                const transitionProgress = (sectionProgress - 0.7) / 0.3; // 0 to 1
-                
-                // Calculate interpolated position
+                const transitionProgress = (sectionProgress - 0.7) / 0.3;
                 const currentRect = currentLink.getBoundingClientRect();
                 const nextRect = nextLink.getBoundingClientRect();
                 const containerRect = navLinksContainer.getBoundingClientRect();
-                
-                const currentLeft = currentRect.left - containerRect.left;
-                const currentWidth = currentRect.width;
-                const nextLeft = nextRect.left - containerRect.left;
-                const nextWidth = nextRect.width;
-                
-                const interpolatedLeft = currentLeft + (nextLeft - currentLeft) * transitionProgress;
-                const interpolatedWidth = currentWidth + (nextWidth - currentWidth) * transitionProgress;
-                
+                const interpolatedLeft = (currentRect.left - containerRect.left) + (nextRect.left - currentRect.left) * transitionProgress;
+                const interpolatedWidth = currentRect.width + (nextRect.width - currentRect.width) * transitionProgress;
                 highlight.style.left = `${interpolatedLeft}px`;
                 highlight.style.width = `${interpolatedWidth}px`;
                 highlight.style.opacity = '1';
-                
-                // Add partial active state
                 currentLink.classList.add('active-partial');
                 nextLink.classList.add('active-partial');
             } else {
-                // Normal state - fully on one section
                 currentLink.classList.add('active');
-                updateHighlight(currentLink, 1);
+                updateHighlight(currentLink);
             }
         }
     }
     
-    // Initialize
     window.addEventListener('scroll', onScroll);
-    onScroll(); // Initial call
+    onScroll();
 });
 
 // o bouncing
 document.addEventListener("DOMContentLoaded", () => {
-
     const logo = document.querySelector(".logo");
     const text = logo.textContent;
     const last = text.slice(-1);
     const base = text.slice(0, -1);
 
-    logo.innerHTML = `
-        ${base}
-        <span class="o-bounce">${last}</span>
-    `;
-
+    logo.innerHTML = `${base}<span class="o-bounce">${last}</span>`;
     const o = logo.querySelector(".o-bounce");
-
     const baseWidth = getTextWidth(base, getComputedStyle(logo));
     o.style.left = baseWidth + "px";
 
     let bouncing = false;
-
     logo.addEventListener("click", () => {
         if (bouncing) return;
         bouncing = true;
         startBounce(o, logo, () => bouncing = false);
     });
 });
-
 
 function getTextWidth(text, style) {
     const canvas = document.createElement("canvas");
@@ -164,373 +114,230 @@ function getTextWidth(text, style) {
     return ctx.measureText(text).width;
 }
 
-
 function startBounce(el, container, onFinish) {
-    let x = 0;
-    let y = 0;
-    let vx = 2.7;
-    let vy = 0;
-    let gravity = 0.7;
-    let damping = 0.55;
-    let floor = 20;
+    let x = 0, y = 0, vx = 2.7, vy = 0;
+    const gravity = 0.7, damping = 0.55, floor = 20;
     let rolling = false;
-
     const maxRight = window.innerWidth + 100;
 
     function animate() {
-
-        // vertical bounce
         if (!rolling) {
             vy += gravity;
             y += vy;
-
             if (y > floor) {
                 y = floor;
                 vy *= -damping;
-
-                if (Math.abs(vy) < 1.0) {
-                    rolling = true;
-                    vy = 0;
-                }
+                if (Math.abs(vy) < 1.0) { rolling = true; vy = 0; }
             }
         }
-
-        // move horizontally
         x += vx;
-
-        if (x > maxRight) {
-            return respawn(el, container, onFinish);
-        }
-
+        if (x > maxRight) return respawn(el, container, onFinish);
         el.style.transform = `translate(${x}px, ${y}px)`;
         requestAnimationFrame(animate);
     }
-
     animate();
 }
 
 function respawn(el, container, onFinish) {
-
-    // posisi awal setelah muncul kiri
-    let x = -150;
-    let y = 16;
-    let vx = 2.5;   // rolling speed
-    const jumpPoint = 20; // titik dekat posisi asli
+    let x = -150, y = 16, vx = 2.5;
+    const jumpPoint = 20;
 
     function rollAnimation() {
-
         x += vx;
         el.style.transition = "none";
         el.style.transform = `translate(${x}px, ${y}px)`;
-
-        // Sudah dekat area awal → jump
         if (x >= jumpPoint) return doJump(el, onFinish);
-
         requestAnimationFrame(rollAnimation);
     }
-
     rollAnimation();
 }
 
-// jump to start
 function doJump(el, onFinish) {
     el.style.transition = "transform 0.45s cubic-bezier(.34,1.56,.64,1)";
     el.style.transform = `translate(0px, -55px)`;
-
     setTimeout(() => {
         el.style.transform = `translate(0px, 0px)`;
-
-        setTimeout(() => {
-            onFinish();
-        }, 400);
-
+        setTimeout(() => { onFinish(); }, 400);
     }, 300);
 }
 
-
-// Typing Animation Function
+// Typing Animation
 function typeRole() {
     const roleText = document.getElementById('role-text');
     const currentRole = roles[roleIndex];
     
     if (!isDeleting) {
-        // Typing
         const displayText = currentRole.substring(0, charIndex);
         roleText.innerHTML = displayText;
         roleText.setAttribute('data-text', displayText);
         charIndex++;
-        
-        if (charIndex > currentRole.length) {
-            // Pause before deleting
-            isDeleting = true;
-            typingSpeed = 2000;
-        } else {
-            typingSpeed = 100;
-        }
+        if (charIndex > currentRole.length) { isDeleting = true; typingSpeed = 2000; }
+        else typingSpeed = 100;
     } else {
-        // Deleting
         const displayText = currentRole.substring(0, charIndex);
         roleText.innerHTML = displayText;
         roleText.setAttribute('data-text', displayText);
         charIndex--;
         typingSpeed = 50;
-        
-        if (charIndex < 0) {
-            // Move to next role
-            isDeleting = false;
-            roleIndex = (roleIndex + 1) % roles.length;
-            charIndex = 0;
-            typingSpeed = 500;
-        }
+        if (charIndex < 0) { isDeleting = false; roleIndex = (roleIndex + 1) % roles.length; charIndex = 0; typingSpeed = 500; }
     }
     
     setTimeout(typeRole, typingSpeed);
 }
 
-// Random Floating Animation for Icons with Profile Photo Repulsion
+// Floating Icons + Repulsion
 function animateIcons() {
     const icons = document.querySelectorAll('.lang-icon');
     const profilePhoto = document.querySelector('.profile-photo');
-
     let mouseInside = false;
 
     profilePhoto.addEventListener("mouseenter", (e) => {
         mouseInside = true;
         const ripple = document.createElement("span");
         ripple.classList.add("ripple-wave");
-
-        // Pusat ripple = posisi foto
         const bounds = profilePhoto.getBoundingClientRect();
         ripple.style.left = bounds.left + bounds.width / 2 + "px";
         ripple.style.top = bounds.top + bounds.height / 2 + "px";
-
-        // Size wave
         ripple.style.width = "200px";
         ripple.style.height = "200px";
-
         document.body.appendChild(ripple);
-
         setTimeout(() => ripple.remove(), 800);
     });
 
-    profilePhoto.addEventListener("mouseleave", () => {
-        mouseInside = false;
-    });
+    profilePhoto.addEventListener("mouseleave", () => { mouseInside = false; });
 
     function getProfileBounds() {
         const rect = profilePhoto.getBoundingClientRect();
-        return {
-            centerX: rect.left + rect.width / 2,
-            centerY: rect.top + rect.height / 2,
-            radius: rect.width / 2 + 30
-        };
+        return { centerX: rect.left + rect.width / 2, centerY: rect.top + rect.height / 2, radius: rect.width / 2 + 30 };
     }
 
     function insideNoGoZone(x, y) {
         const b = getProfileBounds();
-        const dist = Math.sqrt((x - b.centerX) ** 2 + (y - b.centerY) ** 2);
-        return dist < b.radius;
+        return Math.sqrt((x - b.centerX) ** 2 + (y - b.centerY) ** 2) < b.radius;
     }
 
     function getRepelledPosition(x, y) {
         const b = getProfileBounds();
-        const dx = x - b.centerX;
-        const dy = y - b.centerY;
-        const angle = Math.atan2(dy, dx);
-
-        const extraPush = 90; 
-
-        return {
-            x: b.centerX + Math.cos(angle) * (b.radius + extraPush),
-            y: b.centerY + Math.sin(angle) * (b.radius + extraPush)
-        };
+        const angle = Math.atan2(y - b.centerY, x - b.centerX);
+        return { x: b.centerX + Math.cos(angle) * (b.radius + 90), y: b.centerY + Math.sin(angle) * (b.radius + 90) };
     }
 
-    // --------------- NEW: REALTIME SHIELD ----------------
     function realtimeShield() {
         if (mouseInside) {
             icons.forEach(icon => {
                 const rect = icon.getBoundingClientRect();
                 const x = rect.left + rect.width / 2;
                 const y = rect.top + rect.height / 2;
-
                 if (insideNoGoZone(x, y)) {
                     const safe = getRepelledPosition(x, y);
                     const container = icon.parentElement.getBoundingClientRect();
-
-                    // ----- Efek KEPENTAL + DAMAGE -----
                     icon.classList.add("icon-damage");
-
-                    setTimeout(() => {
-                        icon.classList.remove("icon-damage");
-                    }, 200); // efek 0.2 detik
-
+                    setTimeout(() => icon.classList.remove("icon-damage"), 200);
                     icon.style.transition = "200ms linear";
                     icon.style.top = ((safe.y - container.top) / container.height) * 100 + "%";
                     icon.style.left = ((safe.x - container.left) / container.width) * 100 + "%";
                 }
-
             });
         }
-
         requestAnimationFrame(realtimeShield);
     }
-
-    realtimeShield(); // <-- Start the shield loop
-    // ------------------------------------------------------
+    realtimeShield();
 
     icons.forEach((icon, index) => {
         function move() {
             let targetTop, targetLeft, tries = 0;
-
             do {
                 targetTop = Math.random() * 80 + 10;
                 targetLeft = Math.random() * 80 + 10;
-
                 const container = icon.parentElement.getBoundingClientRect();
                 const absX = container.left + (targetLeft / 100) * container.width;
                 const absY = container.top + (targetTop / 100) * container.height;
-
                 if (!insideNoGoZone(absX, absY)) break;
                 tries++;
-
             } while (tries < 20);
 
             const duration = 3000 + Math.random() * 2500;
             icon.style.transition = `${duration}ms ease-in-out`;
             icon.style.top = targetTop + "%";
             icon.style.left = targetLeft + "%";
-
             setTimeout(move, duration);
         }
-
         setTimeout(move, index * 500);
     });
 }
 
-
-// Initialize animations on page load
+// Init on load
 window.addEventListener('load', () => {
-    // Show navbar with slide down animation
     const navbar = document.getElementById('navbar');
-    setTimeout(() => {
-        navbar.classList.add('visible');
-    }, 100);
+    setTimeout(() => { navbar.classList.add('visible'); }, 100);
     
-    // Show hero left section with slide from left
     const heroLeft = document.querySelector('.hero-left');
-    setTimeout(() => {
-        heroLeft.classList.add('visible');
-    }, 300);
+    setTimeout(() => { heroLeft.classList.add('visible'); }, 300);
     
-    // Show hero right section with slide from right
     const heroRight = document.querySelector('.hero-right');
-    setTimeout(() => {
-        heroRight.classList.add('visible');
-    }, 500);
+    setTimeout(() => { heroRight.classList.add('visible'); }, 500);
     
-    // Start typing animation
-    setTimeout(() => {
-        typeRole();
-    }, 1000);
-    
-    // Start icon floating animation
-    setTimeout(() => {
-        animateIcons();
-    }, 1500);
+    setTimeout(() => { typeRole(); }, 1000);
+    setTimeout(() => { animateIcons(); }, 1500);
 });
 
-// Smooth scroll for navigation links
+// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
+    anchor.addEventListener('click', function(e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 });
-
 
 // ==========================================================================================
 // About Me Section Animation on Scroll
 document.addEventListener('DOMContentLoaded', function() {
-    const observerOptions = {
-        threshold: 0.2,
-        rootMargin: '0px'
-    };
-
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                animateAboutSection();   // masuk → animasi ON
+                animateAboutSection();
             } else {
-                resetAboutAnimation();   // keluar → reset supaya bisa animasi lagi
+                resetAboutAnimation();
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.2, rootMargin: '0px' });
 
     const aboutSection = document.querySelector('.about-section');
-    if (aboutSection) {
-        observer.observe(aboutSection);
-    }
+    if (aboutSection) observer.observe(aboutSection);
 
     function animateAboutSection() {
         document.querySelector('.section-title')?.classList.add('animate');
         document.querySelector('.about-photo')?.classList.add('animate');
-
-        document.querySelectorAll('.info-card')
-            .forEach(c => c.classList.add('animate'));
-        document.querySelectorAll('.info-item')
-            .forEach(i => i.classList.add('animate'));
+        document.querySelectorAll('.info-card').forEach(c => c.classList.add('animate'));
+        document.querySelectorAll('.info-item').forEach(i => i.classList.add('animate'));
     }
 
     function resetAboutAnimation() {
         document.querySelector('.section-title')?.classList.remove('animate');
         document.querySelector('.about-photo')?.classList.remove('animate');
-
-        document.querySelectorAll('.info-card')
-            .forEach(c => c.classList.remove('animate'));
-        document.querySelectorAll('.info-item')
-            .forEach(i => i.classList.remove('animate'));
+        document.querySelectorAll('.info-card').forEach(c => c.classList.remove('animate'));
+        document.querySelectorAll('.info-item').forEach(i => i.classList.remove('animate'));
     }
 });
 
+// Marquee scroll direction
 document.addEventListener("DOMContentLoaded", () => {
     const marqueeTop = document.querySelector(".marquee-top");
     const marqueeBottom = document.querySelector(".marquee-bottom");
-
     let lastScroll = window.scrollY;
 
     window.addEventListener("scroll", () => {
         const currentScroll = window.scrollY;
-        const direction = currentScroll > lastScroll ? 1 : -1; 
         lastScroll = currentScroll;
-
         if (marqueeTop) marqueeTop.style.transform = `translateX(${currentScroll * -0.25}px)`;
         if (marqueeBottom) marqueeBottom.style.transform = `translateX(${currentScroll * 0.25}px)`;
     });
 });
 
-
-
-// =====================================================================================================================================================================================================
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
-
+// =======================================================================
+// FIX 1: Skills Section - Animasi masuk DAN keluar yang mulus
+// =======================================================================
 const animateSkills = () => {
     const skillsSection = document.querySelector('#skills');
     const title = document.querySelector('.skills-title');
@@ -541,14 +348,12 @@ const animateSkills = () => {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-
-                // Title tanpa animasi
-                title.classList.add('animate');
-                title.style.opacity = '1';
+                // -- MASUK --
+                if (title) { title.style.opacity = '1'; }
 
                 skillCards.forEach((card, i) => {
-                    card.classList.remove('animate');
-                    card.style.opacity = '0';
+                    clearTimeout(card._exitTimeout);
+                    card.classList.remove('exiting');
 
                     setTimeout(() => {
                         card.classList.add('animate');
@@ -556,369 +361,265 @@ const animateSkills = () => {
                 });
 
             } else {
-                title.classList.remove('animate');
-                skillCards.forEach(card => card.classList.remove('animate'));
+                // -- KELUAR: animasi flip balik dulu --
+                if (title) { title.style.opacity = '0'; }
+
+                skillCards.forEach((card, i) => {
+                    card.classList.add('exiting');
+
+                    card._exitTimeout = setTimeout(() => {
+                        card.classList.remove('animate');
+                        card.classList.remove('exiting');
+                    }, 450); // sedikit lebih lama dari durasi animasi CSS
+                });
             }
         });
     }, {
-        threshold: 0.25,
-        rootMargin: "-60px"
+        threshold: 0.15,
+        rootMargin: "-40px"
     });
 
     observer.observe(skillsSection);
 };
 
-
-// Active state untuk navigation
+// Active nav (fallback)
 const updateActiveNav = () => {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-menu a');
-    
     let current = '';
     sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (window.pageYOffset >= sectionTop - 150) {
-            current = section.getAttribute('id');
-        }
+        if (window.pageYOffset >= section.offsetTop - 150) current = section.getAttribute('id');
     });
-    
     navLinks.forEach(link => {
         link.classList.remove('active');
-        if (link.getAttribute('href').slice(1) === current) {
-            link.classList.add('active');
-        }
+        if (link.getAttribute('href').slice(1) === current) link.classList.add('active');
     });
 };
 
-// Init saat halaman load
 document.addEventListener('DOMContentLoaded', () => {
     animateSkills();
     updateActiveNav();
 });
 
-// Update saat scroll
 window.addEventListener('scroll', updateActiveNav);
 
-// Portfolio Showcase Script
-// Portfolio Showcase Script
+
+// =======================================================================
+// FIX 2: Portfolio Section - Jangan re-animate sebelum benar-benar keluar
+// =======================================================================
 document.addEventListener('DOMContentLoaded', function() {
     // Tab Switching
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabPanes = document.querySelectorAll('.tab-pane');
-    
+
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             const targetTab = btn.getAttribute('data-tab');
-            
-            // Remove active class from all
             tabBtns.forEach(b => b.classList.remove('active'));
             tabPanes.forEach(p => p.classList.remove('active'));
-            
-            // Add active class to clicked
             btn.classList.add('active');
             document.getElementById(targetTab).classList.add('active');
-            
-            // Re-trigger animations for the active tab
             animateTabContent(targetTab);
         });
     });
-    
-    // Intersection Observer for section animation
+
     const portfolioSection = document.querySelector('.portfolio-section');
-    
-    const observerOptions = {
-        threshold: 0.2,
-        rootMargin: '0px'
-    };
-    
+    let portfolioVisible = false;
+    let exitResetTimer = null;
+
     const sectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
+
             if (entry.isIntersecting) {
-                animateSection();
+                // Batalkan reset exit yang mungkin pending
+                clearTimeout(exitResetTimer);
+
+                // Hanya animate masuk kalau memang sebelumnya sudah keluar
+                if (!portfolioVisible) {
+                    portfolioVisible = true;
+                    animateSection();
+                }
+
+            } else if (portfolioVisible) {
+                // Tandai semua card dengan class exiting (trigger animasi keluar via CSS)
+                portfolioVisible = false;
+
+                const allCards = document.querySelectorAll('.portfolio-section .project-card, .portfolio-section .certificate-card, .portfolio-section .timeline-item');
+                allCards.forEach(card => {
+                    card.classList.add('exiting');
+                });
+
+                const portfolioTitle = document.querySelector('.portfolio-section .section-title');
+                const tabNav = document.querySelector('.tab-navigation');
+
+                // Setelah animasi exit selesai (~400ms), baru reset state
+                exitResetTimer = setTimeout(() => {
+                    allCards.forEach(card => {
+                        card.classList.remove('animate');
+                        card.classList.remove('exiting');
+                    });
+                    if (portfolioTitle) portfolioTitle.classList.remove('animate');
+                    if (tabNav) tabNav.classList.remove('animate');
+                }, 450);
             }
         });
-    }, observerOptions);
-    
-    if (portfolioSection) {
-        sectionObserver.observe(portfolioSection);
-    }
-    
+    }, {
+        threshold: 0.08,
+        rootMargin: "0px"
+    });
+
+    if (portfolioSection) sectionObserver.observe(portfolioSection);
+
     function animateSection() {
-        // Animate title
-        const title = document.querySelector('.section-title');
-        if (title) {
-            title.classList.add('animate');
-        }
-        
-        // Animate tab navigation
+        const title = document.querySelector('.portfolio-section .section-title');
         const tabNav = document.querySelector('.tab-navigation');
-        if (tabNav) {
-            tabNav.classList.add('animate');
-        }
-        
-        // Animate initial tab content (projects)
-        setTimeout(() => {
-            animateTabContent('projects');
-        }, 300);
+        if (title) title.classList.add('animate');
+        if (tabNav) tabNav.classList.add('animate');
+        setTimeout(() => { animateTabContent('projects'); }, 300);
     }
-    
+
     function animateTabContent(tabName) {
         const activePane = document.getElementById(tabName);
         if (!activePane) return;
-        
-        // Reset all animations first
+
         const allCards = activePane.querySelectorAll('.project-card, .certificate-card, .timeline-item');
         allCards.forEach(card => {
             card.classList.remove('animate');
+            card.classList.remove('exiting');
         });
-        
-        // Trigger reflow
+
         void activePane.offsetWidth;
-        
-        // Re-add animations
+
         setTimeout(() => {
-            allCards.forEach(card => {
-                card.classList.add('animate');
-            });
+            allCards.forEach(card => card.classList.add('animate'));
         }, 50);
     }
-    
+
     // Certificate Modal
     const certificateCards = document.querySelectorAll('.certificate-card');
     const modal = document.getElementById('certificateModal');
     const modalClose = document.querySelector('.modal-close');
     const modalOverlay = document.querySelector('.modal-overlay');
-    
-    // Certificate data
+
     const certificatesData = [
-        {
-            name: 'LKS IT Software Solutions (District Level)',
-            issuer: 'Department of Education of Karanganyar',
-            date: 'February 2025',
-            image: 'assets/CRF1.jpg'
-        },
-        {
-            name: 'test',
-            issuer: 'test',
-            date: 'test',
-            image: 'assets/cert2.jpg'
-        },
-        {
-            name: 'test',
-            issuer: 'test',
-            date: 'test',
-            image: 'assets/cert3.jpg'
-        },
-        {
-            name: 'test',
-            issuer: 'test',
-            date: 'test',
-            image: 'assets/cert4.jpg'
-        }
+        { name: 'LKS IT Software Solutions (District Level)', issuer: 'Department of Education of Karanganyar', date: 'February 2025', image: 'assets/CRF1.jpg' },
+        { name: 'test', issuer: 'test', date: 'test', image: 'assets/cert2.jpg' },
+        { name: 'test', issuer: 'test', date: 'test', image: 'assets/cert3.jpg' },
+        { name: 'test', issuer: 'test', date: 'test', image: 'assets/cert4.jpg' }
     ];
-    
+
     certificateCards.forEach((card, index) => {
         card.addEventListener('click', () => {
             const certData = certificatesData[index];
-            if (certData) {
-                showCertificateModal(certData);
-            }
+            if (certData) showCertificateModal(certData);
         });
     });
-    
+
     function showCertificateModal(data) {
         document.getElementById('modalCertName').textContent = data.name;
         document.getElementById('modalCertIssuer').textContent = `Issued by: ${data.issuer}`;
         document.getElementById('modalCertDate').textContent = `Date: ${data.date}`;
         document.getElementById('modalCertImage').src = data.image;
-        
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
-    
+
     function closeCertificateModal() {
         modal.classList.remove('active');
         document.body.style.overflow = '';
     }
-    
-    if (modalClose) {
-        modalClose.addEventListener('click', closeCertificateModal);
-    }
-    
-    if (modalOverlay) {
-        modalOverlay.addEventListener('click', closeCertificateModal);
-    }
-    
-    // Close modal with ESC key
+
+    if (modalClose) modalClose.addEventListener('click', closeCertificateModal);
+    if (modalOverlay) modalOverlay.addEventListener('click', closeCertificateModal);
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeCertificateModal();
-        }
+        if (e.key === 'Escape' && modal.classList.contains('active')) closeCertificateModal();
     });
-    
+
     // Show More Certificates
     const showMoreBtn = document.querySelector('.show-more-btn');
     const hiddenCerts = document.querySelectorAll('.hidden-cert');
     let isExpanded = false;
-    
+
     if (showMoreBtn) {
         showMoreBtn.addEventListener('click', () => {
             if (!isExpanded) {
-                // Show hidden certificates
                 hiddenCerts.forEach((cert, index) => {
-                    setTimeout(() => {
-                        cert.classList.add('show');
-                        cert.classList.add('animate');
-                    }, index * 100);
+                    setTimeout(() => { cert.classList.add('show'); cert.classList.add('animate'); }, index * 100);
                 });
-                
                 showMoreBtn.querySelector('span').textContent = 'Show Less';
                 showMoreBtn.querySelector('svg').style.transform = 'rotate(180deg)';
                 isExpanded = true;
             } else {
-                // Hide certificates
-                hiddenCerts.forEach(cert => {
-                    cert.classList.remove('show');
-                    cert.classList.remove('animate');
-                });
-                
+                hiddenCerts.forEach(cert => { cert.classList.remove('show'); cert.classList.remove('animate'); });
                 showMoreBtn.querySelector('span').textContent = 'Show More';
                 showMoreBtn.querySelector('svg').style.transform = 'rotate(0deg)';
                 isExpanded = false;
-                
-                // Scroll back to certificates grid
-                document.querySelector('.certificates-grid').scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'center' 
-                });
+                document.querySelector('.certificates-grid').scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         });
     }
-    
-    // Parallax effect for project images
-    const projectCards = document.querySelectorAll('.project-card');
-    
-    projectCards.forEach(card => {
+
+    // Parallax project cards
+    document.querySelectorAll('.project-card').forEach(card => {
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = (y - centerY) / 20;
-            const rotateY = (centerX - x) / 20;
-            
+            const rotateX = (e.clientY - rect.top - rect.height / 2) / 20;
+            const rotateY = (rect.width / 2 - (e.clientX - rect.left)) / 20;
             const img = card.querySelector('.project-image img');
-            if (img) {
-                img.style.transform = `scale(1.05) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            }
+            if (img) img.style.transform = `scale(1.05) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         });
-        
         card.addEventListener('mouseleave', () => {
             const img = card.querySelector('.project-image img');
-            if (img) {
-                img.style.transform = 'scale(1) rotateX(0) rotateY(0)';
-            }
+            if (img) img.style.transform = 'scale(1) rotateX(0) rotateY(0)';
         });
     });
-    
-    // Timeline animation on scroll
-    const timelineItems = document.querySelectorAll('.timeline-item');
-    
+
+    // Timeline
     const timelineObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate');
-            }
+            if (entry.isIntersecting) entry.target.classList.add('animate');
         });
-    }, {
-        threshold: 0.3
-    });
-    
-    timelineItems.forEach(item => {
-        timelineObserver.observe(item);
-    });
-    
-    // Add hover effect sound (optional - commented out)
-    // const hoverSound = new Audio('path/to/hover-sound.mp3');
-    // document.querySelectorAll('.tab-btn, .project-card, .certificate-card').forEach(el => {
-    //     el.addEventListener('mouseenter', () => {
-    //         hoverSound.currentTime = 0;
-    //         hoverSound.play();
-    //     });
-    // });
-    
-    // Smooth scroll for navigation
-    document.querySelectorAll('a[href^="#portfolio"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.timeline-item').forEach(item => timelineObserver.observe(item));
 });
 
 // ===================== CONTACT SECTION =====================
 document.addEventListener('DOMContentLoaded', function() {
-    // Animate contact section on scroll
     const contactSection = document.querySelector('.contact-section');
     if (contactSection) {
         const contactObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Animate title
                     const title = contactSection.querySelector('.contact-title');
                     if (title) title.classList.add('animate');
-                    
-                    // Animate info cards
-                    contactSection.querySelectorAll('.contact-info-card').forEach(card => {
-                        card.classList.add('animate');
-                    });
-                    
-                    // Animate availability badge
+                    contactSection.querySelectorAll('.contact-info-card').forEach(card => card.classList.add('animate'));
                     const badge = contactSection.querySelector('.availability-badge');
                     if (badge) badge.style.opacity = '1';
-                    
-                    // Animate form
                     const formWrapper = contactSection.querySelector('.contact-form-wrapper');
                     if (formWrapper) formWrapper.classList.add('animate');
                 }
             });
         }, { threshold: 0.15 });
-        
         contactObserver.observe(contactSection);
     }
 
-    // Contact Form Submit
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const btn = contactForm.querySelector('.contact-submit-btn');
             const name = document.getElementById('contactName').value.trim();
             const email = document.getElementById('contactEmail').value.trim();
-            const subject = document.getElementById('contactSubject').value.trim();
             const message = document.getElementById('contactMessage').value.trim();
-            
+
             if (!name || !email || !message) {
                 showToast('Please fill in all required fields.', 'error');
                 return;
             }
 
-            // Button loading state
             btn.classList.add('sending');
             btn.querySelector('span').textContent = 'Sending...';
 
-            // Simulate sending (since no backend)
             setTimeout(() => {
                 btn.classList.remove('sending');
                 btn.querySelector('span').textContent = 'Send Message';
@@ -929,7 +630,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Toast notification helper
 function showToast(message, type = 'success') {
     const existing = document.querySelector('.toast');
     if (existing) existing.remove();
@@ -940,9 +640,7 @@ function showToast(message, type = 'success') {
     document.body.appendChild(toast);
 
     requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            toast.classList.add('show');
-        });
+        requestAnimationFrame(() => { toast.classList.add('show'); });
     });
 
     setTimeout(() => {
