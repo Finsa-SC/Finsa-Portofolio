@@ -865,3 +865,88 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// ===================== CONTACT SECTION =====================
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate contact section on scroll
+    const contactSection = document.querySelector('.contact-section');
+    if (contactSection) {
+        const contactObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Animate title
+                    const title = contactSection.querySelector('.contact-title');
+                    if (title) title.classList.add('animate');
+                    
+                    // Animate info cards
+                    contactSection.querySelectorAll('.contact-info-card').forEach(card => {
+                        card.classList.add('animate');
+                    });
+                    
+                    // Animate availability badge
+                    const badge = contactSection.querySelector('.availability-badge');
+                    if (badge) badge.style.opacity = '1';
+                    
+                    // Animate form
+                    const formWrapper = contactSection.querySelector('.contact-form-wrapper');
+                    if (formWrapper) formWrapper.classList.add('animate');
+                }
+            });
+        }, { threshold: 0.15 });
+        
+        contactObserver.observe(contactSection);
+    }
+
+    // Contact Form Submit
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = contactForm.querySelector('.contact-submit-btn');
+            const name = document.getElementById('contactName').value.trim();
+            const email = document.getElementById('contactEmail').value.trim();
+            const subject = document.getElementById('contactSubject').value.trim();
+            const message = document.getElementById('contactMessage').value.trim();
+            
+            if (!name || !email || !message) {
+                showToast('Please fill in all required fields.', 'error');
+                return;
+            }
+
+            // Button loading state
+            btn.classList.add('sending');
+            btn.querySelector('span').textContent = 'Sending...';
+
+            // Simulate sending (since no backend)
+            setTimeout(() => {
+                btn.classList.remove('sending');
+                btn.querySelector('span').textContent = 'Send Message';
+                contactForm.reset();
+                showToast('✅ Message sent! I\'ll get back to you soon.', 'success');
+            }, 1800);
+        });
+    }
+});
+
+// Toast notification helper
+function showToast(message, type = 'success') {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+    });
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
+    }, 3500);
+}
