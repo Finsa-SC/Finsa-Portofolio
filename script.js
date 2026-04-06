@@ -1,9 +1,9 @@
-// Roles for typing animation
+// Roles for typing animation - Offensive Security focused
 const roles = [
-    'Cybersecurity Enthusiast',
-    'Network Security Learner',
-    'DevSecOps Learner',
-    'Backend & Security Developer'
+    'Offensive Security Learner',
+    'Penetration Tester (in training)',
+    'CTF Player & Bug Hunter',
+    'Red Team Enthusiast'
 ];
 
 let roleIndex = 0;
@@ -336,7 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =======================================================================
-// FIX 1: Skills Section - Animasi masuk DAN keluar yang mulus
+// Skills Section Animation
 // =======================================================================
 const animateSkills = () => {
     const skillsSection = document.querySelector('#skills');
@@ -348,7 +348,6 @@ const animateSkills = () => {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // -- MASUK --
                 if (title) { title.style.opacity = '1'; }
 
                 skillCards.forEach((card, i) => {
@@ -361,7 +360,6 @@ const animateSkills = () => {
                 });
 
             } else {
-                // -- KELUAR: animasi flip balik dulu --
                 if (title) { title.style.opacity = '0'; }
 
                 skillCards.forEach((card, i) => {
@@ -370,7 +368,7 @@ const animateSkills = () => {
                     card._exitTimeout = setTimeout(() => {
                         card.classList.remove('animate');
                         card.classList.remove('exiting');
-                    }, 450); // sedikit lebih lama dari durasi animasi CSS
+                    }, 450);
                 });
             }
         });
@@ -405,7 +403,7 @@ window.addEventListener('scroll', updateActiveNav);
 
 
 // =======================================================================
-// FIX 2: Portfolio Section - Jangan re-animate sebelum benar-benar keluar
+// Portfolio Section
 // =======================================================================
 document.addEventListener('DOMContentLoaded', function() {
     // Tab Switching
@@ -431,17 +429,14 @@ document.addEventListener('DOMContentLoaded', function() {
         entries.forEach(entry => {
 
             if (entry.isIntersecting) {
-                // Batalkan reset exit yang mungkin pending
                 clearTimeout(exitResetTimer);
 
-                // Hanya animate masuk kalau memang sebelumnya sudah keluar
                 if (!portfolioVisible) {
                     portfolioVisible = true;
                     animateSection();
                 }
 
             } else if (portfolioVisible) {
-                // Tandai semua card dengan class exiting (trigger animasi keluar via CSS)
                 portfolioVisible = false;
 
                 const allCards = document.querySelectorAll('.portfolio-section .project-card, .portfolio-section .certificate-card, .portfolio-section .timeline-item');
@@ -452,7 +447,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const portfolioTitle = document.querySelector('.portfolio-section .section-title');
                 const tabNav = document.querySelector('.tab-navigation');
 
-                // Setelah animasi exit selesai (~400ms), baru reset state
                 exitResetTimer = setTimeout(() => {
                     allCards.forEach(card => {
                         card.classList.remove('animate');

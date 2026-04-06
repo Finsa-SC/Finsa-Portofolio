@@ -1152,6 +1152,85 @@ body::-webkit-scrollbar {
         height: 30px;
     }
 }
+
+/* =====================================================================
+   SECURITY TOOLS CARD - New styles
+   ===================================================================== */
+
+/* Full width like tech-stack-card */
+.sec-tools-card {
+    grid-column: 1 / -1;
+}
+
+/* SVG logo inline in skill header */
+.skill-logo-svg {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+}
+
+/* Security tool items — same grid as tech-stack but with badge */
+.sec-tool-item {
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.75rem 0.4rem 0.5rem;
+}
+
+/* Tool category badge */
+.tool-badge {
+    display: inline-block;
+    padding: 0.1rem 0.45rem;
+    border-radius: 10px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    margin-top: 0.1rem;
+}
+
+.tool-badge.recon {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.tool-badge.exploit {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.tool-badge.web {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* Make sec-tool-item name slightly smaller so badge fits */
+.sec-tool-item .tech-name {
+    font-size: 0.72rem;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* Hover effect — red tint for offensive */
+.sec-tool-item:hover {
+    background: #fff5f5;
+    border-color: #fca5a5;
+}
+
+/* Security Tools card header accent */
+.sec-tools-card .skill-header {
+    border-bottom-color: #fca5a5;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .sec-tools-card .tech-stack-items {
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    }
+}
+
 /* Portfolio Showcase Section */
 .portfolio-section {
     min-height: 100vh;
