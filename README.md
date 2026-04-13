@@ -57,5 +57,5 @@ Self-driven developer transitioning into **Offensive Security** — focused on p
 ## 📬 Reach Me
 
 [![Email](https://img.shields.io/badge/Email-finsakusumaputra@gmail.com-D14836?style=flat&logo=gmail&logoColor=white)](mailto:finsakusumaputra@gmail.com)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Finsa_Kusuma_Putra-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/finsa-kusuma-putra-72bab4360)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Finsa_Kusuma_Putra-0A66C2?style=flat&logo=linkedin&logoColor=white)](in/finsa-kusuma-putra-63113a334)
 [![Instagram](https://img.shields.io/badge/Instagram-@finsa080200-E4405F?style=flat&logo=instagram&logoColor=white)](https://www.instagram.com/finsa080200/)
